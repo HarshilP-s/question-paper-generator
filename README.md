@@ -12,6 +12,7 @@ The system ensures error-proof workflows, instant feedback, and outputs that mat
 - Backend: Python (Flask)
 - Frontend: HTML, CSS, JavaScript
 - Database: SQLite (or configurable
+## 📂Project Structure
 question-paper-generator/
 │── app.py              # Main Flask app
 │── ai_logic.py         # Question selection & exam logic
@@ -34,7 +35,11 @@ pip install -r requirements.txt
 python app.py
 5. - Open in browser:
 http://localhost:5000
-
+## 🌐 Deployment
+You can deploy this app on:
+- Heroku (simple Flask deployment)
+- Render (free hosting option)
+- PythonAnywhere (quick setup for Flask apps)
 👩‍💻 Author
 Harshil — Final-year BCA student  Passionate about building a career in technology  Focused on coding, reasoning, and interview preparation
 
