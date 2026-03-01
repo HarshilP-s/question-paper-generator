@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+</head>
+<body>
+
+<h1>👤 My Profile</h1>
+
+<!-- ✅ NAVIGATION -->
+<a href="{{ url_for('upload') }}">📤 Generate Paper</a> |
+<a href="{{ url_for('my_questions') }}">📚 My Question Papers</a> |
+<a href="{{ url_for('logout') }}">🚪 Logout</a>
+
+<hr>
+
+<form method="POST">
+
+    <p><b>Name:</b> {{ user.name }}</p>
+    <p><b>Email:</b> {{ user.email }}</p>
+
+    <label>Subject:</label><br>
+    <input type="text" name="subject" value="{{ user.subject or '' }}"><br><br>
+
+    <label>Institution / College:</label><br>
+    <input type="text" name="institution" value="{{ user.institution or '' }}"><br><br>
+
+    <label>Preferred Question Style:</label><br>
+    <select name="preferred_style">
+        <option value="MIXED" {% if user.preferred_style == 'MIXED' %}selected{% endif %}>Mixed</option>
+        <option value="SHORT" {% if user.preferred_style == 'SHORT' %}selected{% endif %}>Short Answer</option>
+        <option value="LONG" {% if user.preferred_style == 'LONG' %}selected{% endif %}>Long Answer</option>
+        <option value="MCQ" {% if user.preferred_style == 'MCQ' %}selected{% endif %}>MCQ</option>
+    </select><br><br>
+
+    <label>Number of Question Sets:</label><br>
+    <select name="total_sets">
+        <option value="1" {% if user.total_sets == 1 %}selected{% endif %}>1</option>
+        <option value="2" {% if user.total_sets == 2 %}selected{% endif %}>2</option>
+        <option value="3" {% if user.total_sets == 3 %}selected{% endif %}>3</option>
+    </select><br><br>
+
+    <button type="submit">💾 Save Profile</button>
+
+</form>
+
+</body>
+</html>

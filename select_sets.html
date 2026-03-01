@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Question Sets</title>
+
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .info-bar {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 16px;
+        }
+
+        .set-card {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .set-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .set-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .meta {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 15px 0;
+        }
+
+        ol {
+            padding-left: 20px;
+        }
+
+        ol li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .submit-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .note {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Select Question Sets</h1>
+
+<div class="info-bar">
+    <strong>Subject:</strong> {{ setup.subject }} |
+    <strong>Total Marks:</strong> {{ setup.total_marks }} |
+    <strong>University:</strong> {{ setup.university }} |
+
+     <strong>Date:</strong> {{ setup.exam_date }} 
+
+    
+</div>
+
+<form method="POST" action="/finalize_sets">
+    {% for set_name, set_data in question_sets.items() %}
+    <div class="set-card">
+
+      <div class="set-header">
+        <div class="set-title">{{ set_name }}</div>
+        <input type="checkbox" name="selected_sets" value="{{ set_name }}">
+      </div>
+
+    <div class="meta">
+        <strong>Subject:</strong> {{ set_data.subject }} <br>
+        <strong>Total Marks:</strong> {{ set_data.total_marks }} <br>
+        <strong>Difficulty:</strong> {{ set_data.difficulty }} <br>
+        <strong>Paper Pattern:</strong> {{ set_data.paper_pattern }} <br>
+        <strong>University:</strong> {{ setup.university }} <br>
+        <strong>Date:</strong> {{ setup.exam_date }}
+    </div>
+
+    <hr>
+
+    <ol>
+        {% for q in set_data.questions %}
+            <li>{{ q }}</li>
+        {% endfor %}
+    </ol>
+
+</div>
+{% endfor %}
+
+
+    
+
+    
+
+    <div class="submit-container">
+        <button type="submit">Continue to Template Selection</button>
+        <div class="note">
+            Select minimum 1 and maximum 3 question sets
+        </div>
+    </div>
+
+</form>
+
+</body>
+</html>

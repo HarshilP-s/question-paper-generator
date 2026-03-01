@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Answer Key Preview</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #fffaf7; /* soft peach background */
+            margin: 0;
+            padding: 30px;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            color: #5a3e85; /* pastel purple */
+            margin-bottom: 25px;
+        }
+        .set-container {
+            margin: 25px auto;
+            max-width: 1000px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            padding: 25px;
+        }
+        .set-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #d88c9a; /* pastel peach */
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #eee;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background: #5a3e85; /* pastel purple */
+            color: #fff;
+            font-weight: 600;
+        }
+        tr:nth-child(even) {
+            background: #fce1d6; /* light peach row */
+        }
+        .marks {
+            font-weight: bold;
+            color: #5a3e85;
+        }
+        .answer {
+            color: #444;
+            line-height: 1.6;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-download {
+            background: #d88c9a; /* pastel peach */
+            color: #fff;
+        }
+        .btn-download:hover {
+            background: #c67886;
+        }
+    </style>
+</head>
+<body>
+    <h1>Answer Key Preview</h1>
+
+    <form method="get" action="{{ url_for('answer_key_preview') }}" style="text-align:center; margin-bottom:20px;">
+        <label for="set_select"><b>Choose a set:</b></label>
+        <select name="set_name" id="set_select" onchange="this.form.submit()"
+                style="padding:6px 12px; border-radius:6px; border:1px solid #ccc;">
+            {% for set_name in answer_keys.keys() %}
+            <option value="{{ set_name }}" {% if set_name == selected_set %}selected{% endif %}>
+                {{ set_name }}
+            </option>
+            {% endfor %}
+        </select>
+    </form>
+
+    {% for set_name, answers in answer_keys.items() %}
+    {% if set_name == selected_set %}
+    <div class="set-container">
+        <div class="set-title">Set: {{ set_name }}</div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Q. No</th>
+                    <th>Question</th>
+                    <th>Marks</th>
+                    <th>Answer</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ans in answers %}
+                <tr>
+                    <td>{{ ans.q_no }}</td>
+                    <td>{{ ans.question }}</td>
+                    <td class="marks">{{ ans.marks }}</td>
+                    <td class="answer">{{ ans.answer | safe }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="actions">
+            <a href="{{ url_for('download_answer_pdf', set_name=set_name) }}" class="btn btn-download">
+                ⬇ Download {{ set_name }} Answer Key PDF
+            </a>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</body>
+</html>

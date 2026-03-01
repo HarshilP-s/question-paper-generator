@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Select Template</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #fffaf7;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+        .paper-card {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        .paper-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fce1d6;
+            border-radius: 10px;
+        }
+        .paper-header h5 {
+            color: #5a3e85;
+            font-weight: bold;
+        }
+        .section-title {
+            color: #5a3e85;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        .question {
+            margin: 8px 0;
+            padding: 8px;
+            background: #f6f0fa;
+            border-radius: 6px;
+        }
+        .marks-badge {
+            background: #d88c9a;
+            color: #fff;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-left: 8px;
+        }
+        .select-btn {
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-5">
+
+    <h2 class="mb-4 text-center">Select Question Paper Template</h2>
+
+    <!-- Alert Box -->
+    <div id="msgBox" class="alert alert-warning d-none text-center fw-bold" role="alert"></div>
+
+    <!-- Dummy Preview Banner -->
+    <div class="alert alert-info text-center fw-bold mb-4" role="alert">
+        📘 This is a <strong>dummy preview</strong>. Real syllabus questions will be inserted when generating sets.
+    </div>
+
+    <!-- FORM -->
+    <form method="POST" action="{{ url_for('finalize_sets') }}" id="templateForm">
+
+        {% for template in templates %}
+        <div class="paper-card">
+            <div class="paper-header">
+                <h5>{{ paper.university }}</h5>
+                <p><strong>Subject:</strong> {{ paper.subject }}</p>
+                <p><strong>Date:</strong> {{ paper.exam_date }} | <strong>Time:</strong> {{ paper.exam_time }}</p>
+                <p><strong>Maximum Marks:</strong> {{ template.total_marks }}</p>
+                <p><strong>Marks Pattern:</strong>
+                    {% if paper.marks_mode == 'fixed' %}
+                        {{ paper.marks_per_question }} Marks Each
+                    {% elif paper.marks_mode == 'custom' %}
+                        Custom Marks
+                    {% elif paper.marks_mode == 'alternate' %}
+                        Alternate Pattern
+                    {% endif %}
+                </p>
+            </div>
+
+            <h4 class="text-center">{{ template.name }}</h4>
+
+            {% for sec in template.sections %}
+                <h5 class="section-title">Section {{ sec.name }}</h5>
+                <ol>
+                    {% for q in sec.questions %}
+                        <li class="question">
+                            {{ q.text }}
+                            <span class="marks-badge">{{ q.marks }} Marks</span>
+                        </li>
+                    {% endfor %}
+                </ol>
+            {% endfor %}
+
+            <!-- Hidden Checkbox -->
+            <input type="checkbox"
+                   class="d-none template-check"
+                   name="selected_sets"
+                   value="Template {{ loop.index }}"
+                   id="template{{ loop.index }}">
+
+            <!-- Select Button -->
+            <div class="text-end">
+                <button type="button"
+                        class="btn btn-outline-primary select-btn"
+                        data-target="template{{ loop.index }}">
+                    Select This Template
+                </button>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Final Submit -->
+        <div class="text-center mb-5">
+            <button type="submit" class="btn btn-success px-4">
+                Generate Question Paper
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function showMessage(msg) {
+    const box = document.getElementById("msgBox");
+    box.innerText = msg;
+    box.classList.remove("d-none");
+
+    // auto hide after 3 seconds
+    setTimeout(() => {
+        box.classList.add("d-none");
+    }, 3000);
+}
+
+document.querySelectorAll(".select-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const checkboxId = this.getAttribute("data-target");
+        const checkbox = document.getElementById(checkboxId);
+
+        // Toggle selection first
+        checkbox.checked = !checkbox.checked;
+
+        // Count after toggling
+        const checkedCount = document.querySelectorAll(".template-check:checked").length;
+
+        if (checkedCount > 3) {
+            // revert toggle
+            checkbox.checked = false;
+            showMessage("⚠️ You can select maximum 3 templates only.");
+            return;
+        }
+
+        // Update button style/text
+        if (checkbox.checked) {
+            this.classList.remove("btn-outline-primary");
+            this.classList.add("btn-primary");
+            this.innerText = "Selected ✓";
+        } else {
+            this.classList.remove("btn-primary");
+            this.classList.add("btn-outline-primary");
+            this.innerText = "Select This Template";
+        }
+    });
+});
+
+document.getElementById("templateForm").addEventListener("submit", function (e) {
+    const checkedCount = document.querySelectorAll(".template-check:checked").length;
+
+    if (checkedCount < 1 || checkedCount > 3) {
+        e.preventDefault();
+        showMessage("⚠️ Please select minimum 1 and maximum 3 templates.");
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Syllabus</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+
+    <h2 class="mb-4">Upload Your Syllabus</h2>
+
+    <form method="POST" action="/paper_setup" enctype="multipart/form-data">
+
+        <!-- Upload -->
+        <div class="mb-3">
+            <label class="form-label">Upload Syllabus</label>
+            <input type="file" class="form-control" name="syllabus" required>
+        </div>
+
+        <h4 class="mt-4">Add Information</h4>
+
+        <!-- University -->
+        <input type="text" name="university"
+               class="form-control mb-2"
+               placeholder="Enter University Name"
+               required>
+
+        <!-- Exam Date -->
+        <input type="date" name="exam_date"
+               class="form-control mb-2"
+               required>
+
+        <!-- Subject -->
+        <input type="text" name="subject"
+               class="form-control mb-2"
+               placeholder="Enter Subject Name"
+               required>
+
+        <!-- time -->
+        <label class="form-label">Exam Duration</label>
+         <select name="exam_time" class="form-control mb-2" required>
+             <option value="1 Hour">1 Hour</option>
+             <option value="2 Hours">2 Hours</option>
+               <option value="3 Hours">3 Hours</option>
+         </select>
+
+
+        <!-- ================= MARKS CONFIGURATION ================= -->
+
+<!-- Marks Configuration -->
+<h4 class="mt-4">Marks Configuration</h4>
+
+<!-- Pattern Selector -->
+<div class="mb-3">
+  <label class="form-label">Select Pattern</label>
+  <select id="marks_mode" name="marks_mode" class="form-select" onchange="toggleMarksConfig()" required>
+    <option value="">-- Select Pattern --</option>
+    <option value="fixed">Fixed</option>
+    <option value="alternate">Alternate</option>
+  </select>
+</div>
+
+<!-- Fixed Marks -->
+<div id="fixed_marks_div" style="display:none;">
+  <label class="form-label">Fixed Marks Per Question</label>
+  <select name="marks_per_question" class="form-select mb-2">
+    <option value="1">1 Mark Each</option>
+    <option value="5">5 Marks Each</option>
+    <option value="10">10 Marks Each</option>
+  </select>
+</div>
+
+<div id="alternate_marks_div" style="display:none;">
+  <label class="form-label">Alternate Pattern</label>
+  <select name="alternate_pattern" id="alternate_pattern" class="form-select mb-2">
+    <option value="">-- Select Pattern --</option>
+    <option value="7,8">7 / 8</option>
+    <option value="5,6">5 / 6</option>
+    <option value="9,10">9 / 10</option>
+    <option value="10,15">10 / 15</option>
+  </select>
+</div>
+<script>
+function toggleMarksConfig() {
+  const mode = document.getElementById("marks_mode").value;
+
+  const fixedDiv = document.getElementById("fixed_marks_div");
+  const altDiv = document.getElementById("alternate_marks_div");
+
+  // Hide both first
+  fixedDiv.style.display = "none";
+  altDiv.style.display = "none";
+
+  // Remove required attributes
+  document.querySelector('[name="marks_per_question"]').required = false;
+  document.getElementById("alternate_pattern").required = false;
+
+  if (mode === "fixed") {
+    fixedDiv.style.display = "block";
+    document.querySelector('[name="marks_per_question"]').required = true;
+  }
+
+  if (mode === "alternate") {
+    altDiv.style.display = "block";
+    document.getElementById("alternate_pattern").required = true;
+  }
+}
+</script>
+
+
+        <!-- Difficulty -->
+        <select name="difficulty" class="form-control mb-2" required>
+            <option value="easy">Easy</option>
+            <option value="moderate">Moderate</option>
+            <option value="hard">Hard</option>
+        </select>
+
+        <!-- Total Marks -->
+        <select name="total_marks" class="form-control mb-3" required>
+            <option value="20">20</option>
+            <option value="30">30</option>
+            <option value="50">50</option>
+            <option value="100">100</option>
+        </select>
+        <div class="mb-3">
+    <label for="instructions" class="form-label">Exam Instructions</label>
+    <textarea class="form-control" id="instructions" name="instructions"
+              placeholder="e.g. Answer any five questions. All questions carry equal marks. 
+Type NA if you don’t want instructions shown."
+              rows="3"></textarea>
+</div>
+
+        <button  type="submit" class=" btn-primary">Generate Questions</button>
+    </form>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

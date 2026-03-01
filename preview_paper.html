@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paper Preview</title>
+    <style>
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            margin: 40px;
+            font-size: 15px;
+            background: #fffaf7; /* soft peach background */
+            color: #333;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            margin: 8px 0;
+            color: #5a3e85; /* pastel purple headings */
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #fce1d6; /* pastel peach box */
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .meta {
+            line-height: 1.8;
+            font-size: 15px;
+            color: #444;
+        }
+        .question {
+            margin: 12px 0;
+            font-size: 15px;
+            padding: 10px;
+            background: #f6f0fa; /* light purple background */
+            border-radius: 8px;
+        }
+        .marks-badge {
+            background: #d88c9a; /* muted peach badge */
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-left: 8px;
+        }
+        .or {
+            margin-left: 25px;
+            font-style: italic;
+            color: #777;
+        }
+        .set-box {
+            page-break-after: always;
+            margin-bottom: 50px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            background: #ffffff;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 8px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-pdf {
+            background: #d88c9a; /* pastel peach */
+            color: #fff;
+        }
+        .btn-pdf:hover {
+            background: #c67886;
+        }
+        .btn-answer {
+            background: #5a3e85; /* pastel purple */
+            color: #fff;
+        }
+        .btn-answer:hover {
+            background: #4a2f70;
+        }
+        .actions {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+{% if not pdf_mode %}
+
+    {# ---------------- PREVIEW MODE ---------------- #}
+ {% for set_name, sections in final_questions.items() %}
+<div class="set-box">
+    <div class="header">
+        <h2>{{ setup.university }}</h2>
+        <div class="meta">
+            <b>Subject:</b> {{ setup.subject }} <br>
+            <b>Date:</b> {{ setup.exam_date }} |
+            <b>Time:</b> {{ setup.exam_time }} <br>
+            <b>Maximum Marks:</b> {{ setup.total_marks }}
+        </div>
+    </div>
+      <div class="instructions">
+    {% if setup.instructions and setup.instructions|lower != "na" %}
+        {{ setup.instructions }}
+    {% else %}
+        Answer any five questions. All questions carry equal marks.
+    {% endif %}
+</div>
+{% for sec in sections %}
+  <div class="section">
+    <h3>{{ sec.name }}</h3>
+    {% for q in sec.questions %}
+      <div class="question">
+        <span class="qno">{{ loop.index }}.</span>  <!-- number on left -->
+        {{ q.text }}
+        <span class="marks-badge">{{ q.marks }} Marks</span>
+        {% if q.options %}
+          <ul>
+            {% for opt in q.options %}
+              <li><input type="radio" name="{{ sec.name }}"> {{ opt }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+{% endfor %}
+{% for sec in sections %}
+    <h3>{{ sec.name }}</h3>
+
+    {% if sec.name == "Q1 Compulsory" %}
+        {% if sec.questions|length >= 2 %}
+            <div class="question">
+                Q1a. {{ sec.questions[0].text }}
+                <span class="marks-badge">{{ sec.questions[0].marks }} Marks</span>
+                {% if sec.questions[0].options %}
+                    <ul>
+                        {% for opt in sec.questions[0].options %}
+                            <li><input type="radio" name="q1a"> {{ opt }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="question">
+                Q1b. {{ sec.questions[1].text }}
+                <span class="marks-badge">{{ sec.questions[1].marks }} Marks</span>
+                {% if sec.questions[1].options %}
+                    <ul>
+                        {% for opt in sec.questions[1].options %}
+                            <li><input type="radio" name="q1b"> {{ opt }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% else %}
+            {% for q in sec.questions %}
+                <div class="question">
+                    Q1. {{ q.text }}
+                    <span class="marks-badge">{{ q.marks }} Marks</span>
+                    {% if q.options %}
+                        <ul>
+                            {% for opt in q.options %}
+                                <li><input type="radio" name="q1"> {{ opt }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        {% for q in sec.questions %}
+            <div class="question">
+                {{ sec.name }}. {{ q.text }}
+                <span class="marks-badge">{{ q.marks }} Marks</span>
+                {% if q.options %}
+                    <ul>
+                        {% for opt in q.options %}
+                            <li><input type="radio" name="{{ sec.name }}"> {{ opt }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endfor %}
+
+
+    <div class="actions">
+        <a href="{{ url_for('download_pdf', set_name=set_name) }}" class="btn btn-pdf">
+            📄 Download {{ set_name }} PDF
+        </a>
+        <a href="{{ url_for('generate_answer_key', set_name=set_name) }}" class="btn btn-answer">
+            📝 Generate {{ set_name }} Answer Key
+        </a>
+    </div>
+</div>
+{% endfor %}
+
+
+{% else %}
+
+    {# ---------------- PDF MODE ---------------- #}
+    <div class="set-box">
+        <div class="header">
+            <h2>{{ setup.university }}</h2>
+            <div class="meta">
+                <b>Subject:</b> {{ setup.subject }} <br>
+                <b>Date:</b> {{ setup.exam_date }} |
+                <b>Time:</b> {{ setup.exam_time }} <br>
+                <b>Maximum Marks:</b> {{ setup.total_marks }}
+            </div>
+        </div>
+
+        {% for sec in sections %}
+            <h3>Section {{ sec.name }}</h3>
+            {% for q in sec.questions %}
+                <div class="question">
+                    {{ loop.index }}. {{ q.text }}
+                    <span class="marks-badge">{{ q.marks }} Marks</span>
+                </div>
+                {% if q.or %}
+                    <div class="or">OR {{ q.or }}</div>
+                {% endif %}
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+    <!-- Buttons directly below the paper -->
+    <div class="actions">
+        <a href="{{ url_for('download_pdf', set_name=set_name) }}" class="btn btn-pdf">
+            📄 Download {{ set_name }} PDF
+        </a>
+        <a href="{{ url_for('download_answer_pdf', set_name=set_name) }}" class="btn btn-answer">
+            📝 Download {{ set_name }} Answer Key
+        </a>
+    </div>
+
+{% endif %}
+</body>
+</html>
