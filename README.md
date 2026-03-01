@@ -3,14 +3,25 @@ A web-based application designed to help teachers and universities create profes
 It supports flexible marks distribution, dummy previews, customizable instructions, and authentic MCQ rendering with radio buttons.  
 The system ensures error-proof workflows, instant feedback, and outputs that match official university standards.
 ## 🚀 Features
-- Unique question selection
-- Flexible marks distribution
-- Dummy preview mode
-- Customizable instructions and warnings
-- Authentic MCQ rendering with radio buttons
+- ✅ Unique Question Selection – avoids repetition across papers
+- 🎯 Flexible Marks Distribution – customize per section
+- 👩‍🏫 Dummy Preview Mode – teachers can test before finalizing
+- ⚡ Customizable Instructions & Warnings – professional exam-ready output
+- 🔒 Error-Proof Workflows – matches official exam pattern
 ## 🛠 Tech Stack
-- Python (Flask)
-- HTML, CSS, JavaScript
+- Backend: Python (Flask)
+- Frontend: HTML, CSS, JavaScript
+- Database: SQLite (or configurable
+question-paper-generator/
+│── app.py              # Main Flask app
+│── ai_logic.py         # Question selection & exam logic
+│── templates/          # HTML templates
+│   ├── login.html
+│   ├── paper_setup.html
+│   ├── preview_paper.html
+│── static/             # CSS, JS, assets
+│── requirements.txt    # Dependencies
+│── README.md           # Documentation
 ## ⚙️ How to Run
 1. Clone the repo:
    ```bash
