@@ -40,7 +40,7 @@ You can deploy this app on:
 - Heroku (simple Flask deployment)
 - Render (free hosting option)
 - PythonAnywhere (quick setup for Flask apps)
-👩‍💻 Author
+## 👩‍💻 Author
 Harshil — Final-year BCA student  Passionate about building a career in technology  Focused on coding, reasoning, and interview preparation
 
 
