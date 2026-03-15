@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>PDF to Text Converter</title>
+
+<style>
+
+body{
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(120deg,#74ebd5,#ACB6E5);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+/* card */
+
+.container{
+width:520px;
+background:rgba(255,255,255,0.95);
+padding:40px;
+border-radius:16px;
+box-shadow:0 15px 40px rgba(0,0,0,0.15);
+text-align:center;
+animation:fadeIn 0.8s ease;
+}
+
+/* floating illustration */
+
+.hero-img{
+width:110px;
+margin-bottom:10px;
+animation:float 4s ease-in-out infinite;
+}
+
+/* heading */
+
+h2{
+color:#1e293b;
+margin-bottom:10px;
+}
+
+/* description */
+
+.subtitle{
+color:#64748b;
+font-size:15px;
+margin-bottom:25px;
+}
+
+/* upload box */
+
+.upload-box{
+border:2px dashed #94a3b8;
+padding:25px;
+border-radius:10px;
+background:#f8fafc;
+transition:0.3s;
+}
+
+.upload-box:hover{
+background:#eef2ff;
+border-color:#2563eb;
+}
+
+/* input */
+
+input[type="file"]{
+border:none;
+background:none;
+}
+
+/* buttons */
+
+button{
+margin-top:18px;
+padding:12px 26px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:white;
+font-size:15px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#1d4ed8;
+transform:translateY(-3px);
+}
+
+/* continue button */
+
+.setup-btn{
+background:#10b981;
+}
+
+.setup-btn:hover{
+background:#059669;
+}
+
+/* animation */
+
+@keyframes float{
+0%{transform:translateY(0px)}
+50%{transform:translateY(-10px)}
+100%{transform:translateY(0px)}
+}
+
+@keyframes fadeIn{
+from{opacity:0; transform:translateY(20px)}
+to{opacity:1; transform:translateY(0)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<img class="hero-img"
+src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+
+<h2>Convert Syllabus PDF to Text</h2>
+
+<p class="subtitle">
+Upload your syllabus PDF and convert it into editable text.  
+This text will be used to generate smart exam questions automatically.
+</p>
+
+<form method="POST" enctype="multipart/form-data">
+
+<div class="upload-box">
+<input type="file" name="pdf_file" accept=".pdf" required>
+</div>
+
+<button type="submit">Convert to TXT</button>
+
+</form>
+
+<a href="{{ url_for('paper_setup') }}">
+<button class="setup-btn">Continue to Paper Setup</button>
+</a>
+
+</div>
+
+</body>
+</html>
